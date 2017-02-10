@@ -30,8 +30,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // DB内のタスクが格納されるリスト。
     // 日付近い順\順でソート：降順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
-    let taskArray = try! Realm().objects(Task.self).sorted(byProperty: "date", ascending: false)   // ←追加
-    let ChoiseTask = try! Realm().objects(Task.self).filter(txt_string).sorted(byProperty: "date", ascending: false)
+    var taskArray = try! Realm().objects(Task.self).sorted(byProperty: "date", ascending: false)   // ←追加
+
     
 ////////////////////////////////////////////////////////////////////B）Realmの設定
     
@@ -143,7 +143,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func ChoiceCategory(_ sender: Any) {
         
         txt_string=txt_SelectCategory.text
-        
+        let predicate = NSPredicate(format: "category = %@", (txt_string))
+        taskArray = realm.objects(Task.self).filter(predicate)
+        tableView.reloadData()
     }
 
 }
